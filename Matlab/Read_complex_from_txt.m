@@ -1,29 +1,33 @@
-% Path to your text file
-filename = './complex_output.txt';  % Adjust path as needed
+% READ_COMPLEX_FROM_TXT Reconstruct a complex row vector from decimal I/Q pairs.
+% Expected layout: I0, Q0, I1, Q1, ... with one integer on each line.
 
-% Read all numbers from file
+% Relative paths resolve from MATLAB's current folder. For the VHDL round trip,
+% change this path to the file produced by file_writer.
+filename = './complex_output.txt';
+
+% Load a headerless, single-column numeric text file.
 data = dlmread(filename);
 
-% Sanity check: must have even number of lines (I/Q pairs)
+% Each complex sample requires two values; reject an unmatched component.
 if mod(length(data), 2) ~= 0
     error('The input file must contain an even number of lines (I/Q pairs).');
 end
 
-% Reshape into 2 rows: first row is I, second is Q
+% Column-major reshape places each consecutive I/Q pair in a separate column.
 data_reshaped = reshape(data, 2, []);
 
-% Extract I and Q
-I = data_reshaped(1, :);  % Even lines = I
-Q = data_reshaped(2, :);  % Odd lines = Q
+% MATLAB line numbering starts at 1: I is on odd lines, Q is on even lines.
+I = data_reshaped(1, :);  % Lines 1, 3, 5, ...
+Q = data_reshaped(2, :);  % Lines 2, 4, 6, ...
 
-% Combine into complex array
-complex_signal = complex(I, Q);  % I + jQ
+% Reconstruct the complex row vector without normalization or rescaling.
+complex_signal = complex(I, Q);  % I + j*Q
 
-% Optional: display the result
+% Display the reconstructed samples in the command window.
 disp('Complex signal:');
 disp(complex_signal);
 
-% Optional: plot
+% Plot I against Q. Connecting lines show the sample order in the input file.
 figure;
 plot(real(complex_signal), imag(complex_signal), 'o-');
 xlabel('In-phase (I)');
