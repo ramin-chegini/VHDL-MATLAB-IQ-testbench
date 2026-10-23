@@ -92,7 +92,3 @@ The clock runs for a fixed 2 ms rather than stopping at end of file. The testben
 
 Source comments and this README describe the existing implementation. No tests, compilation, MATLAB execution, or VHDL simulation were performed for this documentation update; simulator compatibility and runtime behavior have not been verified by it.
 
-## Credits
-
-- **Milad Mohammadi.B**: original VHDL and MATLAB design and simulation setup.
-- **ChatGPT (OpenAI)**: assistance with code generation, explanation, and documentation.
